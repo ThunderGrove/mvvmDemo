@@ -4,6 +4,7 @@ import com.example.mvvmdemo.model.DataModel;
 
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
+import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -18,6 +19,8 @@ public class MainActivity extends AppCompatActivity{
 
     DataModel dataModel=new DataModel();
 
+    Handler handler=new Handler();
+
     @Override
     protected void onCreate(Bundle savedInstanceState){
         super.onCreate(savedInstanceState);
@@ -26,10 +29,26 @@ public class MainActivity extends AppCompatActivity{
         editText=(EditText)findViewById(R.id.editText);
         label=(TextView)findViewById(R.id.label);
         button=(Button)findViewById(R.id.button);
+
+        int delay=200;
+
+        handler.postDelayed(new Runnable(){
+            public void run(){
+                autoUpdateContent();
+                handler.postDelayed(this, delay);
+            }
+        }, delay);
+
     }
 
-    public void updateLabel(View arg0){
+    public void updateLabelString(View arg0){
         dataModel.setText(editText.getText().toString());
-        label.setText(dataModel.getText());
+    }
+
+    public void autoUpdateContent(){
+        if(dataModel.isChanged()){
+            label.setText(dataModel.getText());
+            dataModel.setChanged(false);
+        }
     }
 }
