@@ -1,10 +1,8 @@
 package com.example.mvvmdemo.view;
 
-import com.example.mvvmdemo.model.DataModel;
-
+import com.example.mvvmdemo.presenter.ModelPresenter;
 import androidx.appcompat.app.AppCompatActivity;
 import android.os.Bundle;
-//import android.os.Handler;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
@@ -17,9 +15,7 @@ public class MainActivity extends AppCompatActivity{
     TextView label;
     Button button;
 
-    DataModel dataModel=new DataModel();
-
-    //Handler handler=new Handler();
+    ModelPresenter modelPresenter=new ModelPresenter();
 
     @Override
     protected void onCreate(Bundle savedInstanceState){
@@ -31,31 +27,15 @@ public class MainActivity extends AppCompatActivity{
         label=(TextView)findViewById(R.id.label);
         button=(Button)findViewById(R.id.button);
 
-        /*int delay=200;
-
-        handler.postDelayed(new Runnable(){
-            public void run(){
-                autoUpdateContent();
-                handler.postDelayed(this, delay);
-            }
-        }, delay);*/
-
     }
 
     public void updateLabelString(View arg0){
-        dataModel.setText(editText.getText().toString());
-    }
-
-    public void autoUpdateContent(){
-        if(dataModel.isChanged()){
-            label.setText(dataModel.getText());
-            dataModel.setChanged(false);
-        }
+        modelPresenter.updateModel(editText.getText().toString());
     }
 
     private void observePresenter(){
-        dataModel.addObserver(
-                (o, arg)->label.setText(dataModel.getText())
+        modelPresenter.addObserver(
+                (o, arg)->label.setText(modelPresenter.getModel())
         );
     }
 }
